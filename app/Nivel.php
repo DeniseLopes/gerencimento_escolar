@@ -8,7 +8,8 @@ class Nivel extends Model
 {
     protected $table = 'Nivel';
     protected $fillable = ['nome'];
-
+     
+    public $timestamps = false;
     //relacionamentos
 
     public function usuarios()

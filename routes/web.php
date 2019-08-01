@@ -14,4 +14,12 @@
 Route::get('/', 'UsuarioController@index'); //enviar dados
 Route::get('/form', 'UsuarioController@create');
 Route::post('/','UsuarioController@store');
+Route::get('{id}/edit', 'UsuarioController@edit');
+Route::put('/{id}', 'UsuarioController@update');
 //Route::get('/soma/{a}/{b}', 'UsuarioController@soma');
+
+Route::get('/nivel', 'NivelController@index'); //enviar dados
+Route::get('nivel/form', 'NivelController@create');
+Route::post('/nivel','NivelController@store');
+Route::get('/nivel/{id}/edit', 'NivelController@edit');
+Route::put('/nivel/{id}','NivelController@update');
