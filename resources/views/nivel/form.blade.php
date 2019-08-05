@@ -8,7 +8,7 @@
 </head>
 <body>
     <form action="{{url(isset($nivel) ? 'nivel/'.$nivel->id : 'nivel/')}}" method = "POST">
-    @if($nivel)
+    @if(isset($nivel))
     @method('PUT')
     @endif
 
