@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\{Nivel, Usuario};
+use App\Http\Requests\UsuarioStoreRequest;
 
 class UsuarioController extends Controller
 {
     public function index()
     {
+        //Usuario ativos
         $usuarios = Usuario::all();
-        return view('index', compact('usuarios'));
+
+        //Excluido e não excluido
+        $usuariosDeletados = Usuario::onlyTrashed()->get();
+        return view('index', compact('usuarios', 'usuariosDeletados'));
     }
 
     public function soma($a,$b)
@@ -27,7 +32,7 @@ class UsuarioController extends Controller
         return view('form', compact('niveis'));
     }
 
-    public function store(Request $request)
+    public function store(UsuarioStoreRequest $request)
     {
         // $usuario = Usuario::create([
         //     'nome' => $request->nome,
@@ -35,8 +40,8 @@ class UsuarioController extends Controller
         //     'data_nascimento'=>$request->data_nascimento,
         //     'nivel_id'=>$request->nivel_id
         // ]);
-        $usuario = new Usuario;
-        $usuario->create($request->all());
+        
+        Usuario::create($request->all());
         return redirect('/');
     }
 
@@ -48,7 +53,7 @@ class UsuarioController extends Controller
         return view('form', compact('usuario', 'niveis'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UsuarioStoreRequest $request, $id)
     {
         $usuario = Usuario::findOrFail($id);
        
@@ -63,4 +68,17 @@ class UsuarioController extends Controller
 
     }
 
+    public function destroy($id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $usuario->delete();
+        return back();
+    }
+
+    public function restore($id)
+    {
+        $usuario = Usuario::onlyTrashed()->findOrFail($id);
+        $usuario->restore();
+        return back();
+    }
 }

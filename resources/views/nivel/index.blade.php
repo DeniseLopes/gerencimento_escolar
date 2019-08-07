@@ -11,13 +11,25 @@
         <tr>
             <th>id</th>
             <th>Nome</th>
+            <th>Ações</th>
         </tr>
         @foreach($niveis as $nivel)
             <tr>
             <td>{{$nivel->id}}</td>
             <td>{{$nivel->nome}}</td>
+            <td><a href="{{url($nivel->id . '/edit')}}"><button>Editar</button></a>
+            <form method="POST" action="{{url($nivel->id)}}">
+                @method('delete')
+                @csrf
+                <button type = "submit">Deletar</button>
+            </form>
+
+            </td>
+           
             </tr>
+            
         @endforeach
+
    </table>
 </body>
 </html>
