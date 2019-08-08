@@ -17,4 +17,9 @@ class Usuario extends Model
         {
             return $this->belongsTo('App\Nivel');
         }
+
+        public function materias()
+        {
+            return $this->belongsToMany("App\Materia", "usuario_materia")->withPivot('carga_horaria');
+        }
 }

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'UsuarioController@index'); //enviar dados
-Route::get('/form', 'UsuarioController@create');
+Route::get('/form', 'UsuarioController@create')->middleware('checarhorario');
 Route::post('/','UsuarioController@store');
 Route::get('{id}/edit', 'UsuarioController@edit');
 Route::put('/{id}', 'UsuarioController@update');

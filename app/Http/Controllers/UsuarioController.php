@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Nivel, Usuario};
+use App\{Nivel, Usuario, Materia};
 use App\Http\Requests\UsuarioStoreRequest;
+use DB;
 
 class UsuarioController extends Controller
 {
@@ -26,10 +27,10 @@ class UsuarioController extends Controller
     public function create()
     {
         $niveis = Nivel::all();
-
+        $materias = Materia::all();
         
 
-        return view('form', compact('niveis'));
+        return view('form', compact('niveis', 'materias'));
     }
 
     public function store(UsuarioStoreRequest $request)
@@ -40,9 +41,27 @@ class UsuarioController extends Controller
         //     'data_nascimento'=>$request->data_nascimento,
         //     'nivel_id'=>$request->nivel_id
         // ]);
+        DB::beginTransaction();
+        try{
+        $usuario = Usuario::create($request->all());
+            //caso tiver pivot
+        // $usuario->materias()->sync(
+        //     [
+        //         1 =>['carga_horaria'=> 20],
+        //         2 =>['carga_horaria'=> 25]
+        //     ]
+        // );
+
+        $usuario->materias()->sync($request->materias);
+
+        DB::commit();
         
-        Usuario::create($request->all());
-        return redirect('/');
+        return back()->with('success', 'Usuario cadastrado com sucesso!');
+
+        }catch(\Exception $e){
+          DB::rollback();  
+        return back()->with('error','Erro no servidor');
+        }
     }
 
     public function edit($id)

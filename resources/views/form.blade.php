@@ -7,6 +7,15 @@
     <title>Formularioform</title>
 </head>
 <body>
+    <div>
+        @if(Session::has('success'))
+            <p>{{Session::get('success')}}</p>
+        @endif
+
+        @if(Session::has('error'))
+            <p>{{Session::get('error')}}</p>
+        @endif
+    </div>
     <form method="POST" action="{{url(isset($usuario)? $usuario->id:'')}}">
 
     @if(isset($usuario))
@@ -27,9 +36,16 @@
 
         <label for="data_nascimento">Data de Nascimento</label>
         <input type="text" name="data_nascimento" id="data_nascimento" value="{{old('data_nascimento', isset($usuario)?$usuario->data_nascimento:'')}}"><br>
-       {{$errors->first('data_nascimento')}}
+        {{$errors->first('data_nascimento')}}
         <br><br>
-       
+
+        <select name="materias[]" multiple>
+            @foreach($materias as $materia)
+            <option value="{{$materia->id}}">{{$materia->nome}}</option>
+            @endforeach
+        </select>
+        <br><br>
+
        <select name="nivel_id">
        @foreach($niveis as $nivel)
        <option {{isset($usuario) && ($usuario->nivel_id == $nivel->id) ?'selected':''}} 
@@ -37,6 +53,7 @@
        @endforeach
        </select><br>
        {{$errors->first('nivel_id')}}
+        <br>
         
        <input type="submit" value="Enviar">
 
