@@ -16,7 +16,9 @@
             <p>{{Session::get('error')}}</p>
         @endif
     </div>
-    <form method="POST" action="{{url(isset($usuario)? $usuario->id:'')}}">
+    <img id="loading" width="100" src="{{asset('img/load.gif')}}" hidden/>
+    <p id='message'></p>
+    <form id="form-usuario" method="POST" action="{{url(isset($usuario)? $usuario->id:'')}}">
 
     @if(isset($usuario))
         @method('PUT')
@@ -58,5 +60,33 @@
        <input type="submit" value="Enviar">
 
     </form>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+  <script>
+    $(document).on('submit', '#form-usuario', function(event){
+        $("#loading").removeAttr('hidden');
+
+        event.preventDefault();
+        
+        $.ajax({
+            method: "post",
+            url: "{{url('/')}}",
+            data: $('#form-usuario').serialize()
+        });
+        
+        .done(function(msg){
+            $("#loading").attr('hidden','hidden');
+            $('#message').html('cadastrado com sucesso');
+        });
+        .fail(function(msg){
+            $("#loading").attr('hidden','hidden');
+            $('#message').html('Ocorreu um erro');
+        });
+    });
+
+  </script>
 </body>
 </html>
